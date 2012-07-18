@@ -1,0 +1,244 @@
+*NERD_comments.txt*                                                   v118
+
+
+                        NERD_COMMENTS REFERENCE MANUAL~
+
+
+
+
+
+==============================================================================
+CONTENTS                                              *NERD_comments-contents* 
+
+    1.Intro                               : |NERD_comments|
+    2.Functionality provided              : |NERD_com-Functionality|
+    3.Customisation                       : |NERD_com-Customisation|
+    4.Issues with the script              : |NERD_com-issues|
+    5.TODO list                           : |NERD_com-todo|
+    6.Credits                             : |NERD_com-credits|
+
+==============================================================================
+1. Intro                                                       *NERD_comments*
+
+NERD_comments provides a set of handy key mappings for commenting code. These
+mappings are consistent across all supported filetypes. 
+
+
+
+==============================================================================
+2. Functionality provided                             *NERD_com-Functionality*
+
+The following key mappings are provided by default:
+
+Note: <leader> is a user defined key that is used to start keymappings and 
+defaults to \. Check out |<leader>| for details.
+
+<leader>cc      Comments out the current line. If multiple lines are selected
+in visual mode, they are all commented out.  If a block is selected in
+visual-block mode then this block will be commented out. The left and right
+comment delimiters will line up down the left side and right sides of the
+selection box. If a line ends before the right side of the selection box the
+delimiter will be placed on the EOL. If a line finishes before the left side
+of the selection box or is empty, it will not be commented.  Works in
+normal,visual and visual block modes.  The keys for this mappings can be
+overridden with the |NERD_com_line_map| option.
+
+<leader>cu      Uncomments the current line. If multiple lines are selected in
+visual mode then they are all uncommented. If the current filetype has
+alternate comment delimiters and the line(s) are commented using these
+then, by default, these comments delimiters will be removed if none of the
+normal delimiters are detected --- see |NERD_dont_remove_alt_coms|. Works in
+normal,visual modes.  The keys for this mappings can be overridden with the
+|NERD_uncom_line_map| option.
+
+<leader>cn      Nested commenting. Works the same as <leader>cc except that if
+a line is commented, it will be commented again (provided that the current
+commenting style has no right delimiter which could cause compiler errors)
+Works in normal,visual modes.  The keys for this mappings can be overridden
+with the |NERD_com_line_nest_map| option.
+
+<leader>c$      Comments the current line from the current cursor position up
+to the end of the line. Works in normal mode. The keys for this mappings can
+be overridden with the |NERD_com_to_end_of_line_map| option.
+
+<leader>ca      Changes to the alternative commenting style if one is
+available. For example, if the user is editing a c++ file using // comments
+and they hit <leader>ca then they will switched over to /**/ comments.  Works
+in normal mode. The keys for this mappings can be overridden with the
+|NERD_alt_com_map| option. See also |NERD_dont_remove_alt_coms|.
+
+<C-c>       Adds comment delimiters at the current cursor position and inserts
+between them. Works in insert mode. The keys for this mappings can be 
+overridden with the |NERD_com_in_insert_map| option.
+
+Files that can be commented by this plugin:
+ada ant-build-files c c# c++ dosbatchfiles dtd h haskell html java
+lisp Makefiles pascal perl prolog python ruby sh smalltalk tcl tex
+vim xml xslt
+
+
+==============================================================================
+3. Customisation                                      *NERD_com-Customisation*
+
+General options
+-----------------------------------------------------------------------------
+                                                       *loaded_nerd_comments*
+If this script is making you insane you can turn it off by placing >
+    let loaded_nerd_comments=1
+<
+in your vimrc
+
+                                                   *NERD_dont_remove_alt_coms*
+When uncommenting a line when there is an alternative commenting style for the
+current filetype, this option tells the script not to look for, and remove,
+comments delimiters of the alternative style. >
+    let NERD_dont_remove_alt_coms=1
+<
+
+
+Comment style options
+-----------------------------------------------------------------------------
+
+                                            *NERD_use_nested_comments_default*
+
+When this option is turned on comments are nested automatically. That is, if
+you hit <leader>cc on a line that is already, or contains comments, it will
+be commented again. Note: comments are only nested if the commenting style 
+has no right delimiter. This is to avoid compiler errors in languages like
+c but will allow, for example, // Java comments to be nested. >
+    let NERD_use_nested_comments_default=1
+<
+
+                                                 *NERD_use_c_style_h_comments*
+When set, this option forces /* */ style comments to be used with .h files.
+This option is needed because h files can be used with c as well as c++ or 
+c#. The later two allow // style commenting whereas c doesnt >
+    let NERD_use_c_style_h_comments=1
+<
+                                              *NERD_use_c_style_java_comments*
+NERD_comments can be told to use /* */ style comments instead of // for java 
+with this option >
+    let NERD_use_c_style_java_comments=1
+<
+                                               *NERD_use_c_style_cpp_comments*
+NERD_comments can be told to use /* */ c++ style comments instead of // with
+this option >
+    let NERD_use_c_style_cpp_comments=1
+<
+                                                *NERD_use_c_style_cs_comments*
+NERD_comments can be told to use /* */ style c# comments instead of // with 
+this option >
+    let NERD_use_c_style_cs_comments=1
+<
+                                            *NERD_use_c_style_prolog_comments*
+NERD_comments can be told to use /* */ comments for prolog instead of % with 
+this option >
+    let NERD_use_c_style_prolog_comments=1
+<
+
+Comment key mapping customisation options
+-----------------------------------------------------------------------------
+
+                                     *NERD_com_line_map* *NERD_uncom_line_map*
+                             *NERD_com_line_nest_map* *NERD_com_in_insert_map* 
+                                                 *NERD_com_to_end_of_line_map*
+                                                            *NERD_alt_com_map*
+These options are used to override the default keys that are used for the
+commenting mappings. Their values must be set to strings. As an example: if
+you wanted to use the mapping <leader>foo to uncomment lines of code then 
+you would place this line in your vimrc >
+    let NERD_uncom_line_map="<leader>foo"
+<
+
+Check out |NERD_com-Functionality| for details about what the following 
+mappings do.
+                                
+To override the <leader>cc mapping, set this option >
+    let NERD_com_line_map="<new mapping>"
+<
+To override the <leader>cu mapping, set this option >
+    let NERD_uncom_line_map="<new mapping>"
+<
+To override the <leader>cn mapping, set this option >
+    let NERD_com_line_nest_map="<new mapping>"
+<
+To override the <leader>c$ mapping, set this option >
+    let NERD_com_to_end_of_line_map="<new mapping>"
+<
+To override the <leader>ca mapping, set this option >
+    let NERD_alt_com_map="<new mapping>"
+<
+To override the <C-c> mapping, set this option >
+    let NERD_com_in_insert_map="<new mapping>"
+<
+
+==============================================================================
+4. Issues with the script                                    *NERD_com-issues*
+
+
+Heuristics used to distinguish the real comment delimiters
+------------------------------------------------------------------------------
+Because we have comment mappings that place delimiters in the middle of lines,
+for example <leader>c$ |NERD_com-Functionality|, removing comment delimiters
+is a bit tricky. The reason being that just because comment delimiters 
+appear in a line doesnt mean they really are delimiters. For example, Java
+uses // comments but the line >
+    System.out.println("//");
+<
+clearly contains no real comment delimiters. 
+
+To distinguish between "real" comment delimiters and "fake" ones we use a set
+of heuristics. For example, one such heuristic states that any comment
+delimiter that has an odd number of non-escaped " characters preceding it on
+the line is not a comment because it is probably part of a string. These 
+heuristics, while usually pretty accurate, will not work all the time.
+
+
+Commenting .vim files
+------------------------------------------------------------------------------
+Vim files are exceptionally evil to get commenting right for. This is because
+the comment delimiter " is used for other things than delimiting comments. To
+help comment vim files properly a set of heuristics have been written
+especially for .vim files. Vim files are now commented correctly MOST of the
+time.
+
+
+Because this plugin approaches commenting on a line by line basis...
+------------------------------------------------------------------------------
+Note that, although this plugin can comment multiple lines at once, it still
+performs commenting on a line by line basis. This means that comments like,
+for example > 
+    /*
+     * FOOBAR BABY!
+     */
+<
+will not be uncommented properly.
+
+==============================================================================
+5. TODO list                                                   *NERD_com-todo*
+
+
+If a line is commented using two commenting styles simultaneously e.g, >
+    /* //foo */
+<
+currently the active commenting styles delimiters are removed first if 
+<leader>cu is pressed. I think the outer most comment delimiters should be 
+removed first regardless of whether they are the alternate delimiters or not.
+    
+
+
+==============================================================================
+6. Credits                                                  *NERD_com-credits*
+
+Thanks and respect to the following people:
+
+Thanks to Nick Brettell for his ideas. A bloody good bastard.
+:.-1s/good //
+
+Thanks to Matthew Hawkins for his awesome refactoring!
+
+Thanks to the authors of the vimspell who's documentation installation
+function I stole :)
+
+
+ vim:tw=78:ts=8:ft=help:norl:
